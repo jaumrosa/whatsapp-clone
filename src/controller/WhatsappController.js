@@ -108,12 +108,12 @@ class WhatsAppController {
         });
 
         this.el.btnSavePanelEditProfile.on('click', e => {
-            console.log(this.el.inputNamePanelEditProfile.innerHTML)
+            console.log(this.el.inputNamePanelEditProfile.innerHTML);
         });
 
         this.el.formPanelAddContact.on('submit', e => {
             e.preventDefault();
-            let formData = new FormData(this.el.formPanelAddContact)
+            let formData = new FormData(this.el.formPanelAddContact);
         });
 
         this.el.contactsMessagesList.querySelectorAll('.contact-item').forEach(item =>{
@@ -170,11 +170,11 @@ class WhatsAppController {
         this.el.btnClosePanelDocumentPreview.on('click', e => {
             this.closeAllMainPanel();
             this.el.panelMessagesContainer.show();
-        })
+        });
 
         this.el.btnSendDocument.on('click', e => {
             console.log('send document');
-        })
+        });
 
         this.el.btnAttachContact.on('click', e => {
             this.el.modalContacts.show();
@@ -182,9 +182,35 @@ class WhatsAppController {
 
         this.el.btnCloseModalContacts.on('click', e => {
             this.el.modalContacts.hide();
-        })
+        });
 
-        
+        this.el.btnSendMicrophone.on('click', e => {
+            this.el.recordMicrophone.show();
+            this.el.btnSendMicrophone.hide();
+            this.startRecordMicrophoneTimer();
+        });
+
+        this.el.btnCancelMicrophone.on('click', e => {
+            this.closeRecordMicrophone();
+        });
+
+        this.el.btnFinishMicrophone.on('click', e => {
+            this.closeRecordMicrophone();
+        });
+
+    }
+
+    startRecordMicrophoneTimer(){
+        let start = Date.now();
+        this._recordMicrophoneInterval = setInterval (()=>{
+            this.el.recordMicrophoneTimer.innerHTML = (Date.now() - start)
+        }, 100)
+    }
+
+    closeRecordMicrophone(){
+        this.el.recordMicrophone.hide();
+        this.el.btnSendMicrophone.show();
+        clearInterval(this._recordMicrophoneInterval);
     }
 
     closeAllMainPanel(){
