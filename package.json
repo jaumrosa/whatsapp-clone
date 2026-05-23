@@ -1,0 +1,24 @@
+{
+  "name": "whatsapp-clone",
+  "version": "1.0.0",
+  "description": "[![Hcode Treinamentos](https://www.hcode.com.br/res/img/hcode-200x100.png)](https://www.hcode.com.br)",
+  "homepage": "https://github.com/jaumrosa/whatsapp-clone#readme",
+  "bugs": {
+    "url": "https://github.com/jaumrosa/whatsapp-clone/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaumrosa/whatsapp-clone.git"
+  },
+  "license": "ISC",
+  "author": "João Pedro Rosa",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "webpack": "^3.1.0",
+    "webpack-dev-server": "^2.5.1"
+  }
+}
