@@ -1,63 +1,76 @@
-import { ClassEvent } from "../utils/ClassEvent.js";
+    import { ClassEvent } from "../utils/ClassEvent.js";
 
-export class MicrophoneController extends ClassEvent {
-    constructor(){
-        super();
-        this._mimeType = 'audio/webm';
-        this._available = false;
-        navigator.mediaDevices.getUserMedia({
-            audio: true
-        }).then(stream => {
-            this._available = true
-            this._stream = stream;
-            this.trigger('ready', this._stream);
-        }).catch(err=>{
-            console.error(err); 
-        });
-    }
-
-    stop(){
-        this._stream.getTracks().forEach(track => {
-            track.stop();
-        });
-    }
-
-    isAvailable(){
-        return this._available;
-    }
-
-    startRecorder(){
-        if(this.isAvailable()){
-            this._mediaRecorder = new MediaRecorder(this._stream, {
-                mimeType: this._mimeType
+    export class MicrophoneController extends ClassEvent {
+        constructor(){
+            super();
+            this._mimeType = 'audio/webm';
+            this._available = false;
+            navigator.mediaDevices.getUserMedia({
+                audio: true
+            }).then(stream => {
+                this._available = true
+                this._stream = stream;
+                this.trigger('ready', this._stream);
+            }).catch(err=>{
+                console.error(err); 
             });
-            this._recordedChunks = [];
+        }
 
-            this._mediaRecorder.addEventListener('dataavailable', e => {
-                if(e.data.size > 0){
-                    this._recordedChunks.push(e.data);
-                }
+        stop(){
+            this._stream.getTracks().forEach(track => {
+                track.stop();
             });
+        }
 
-            this._mediaRecorder.addEventListener('stop', e => {
-                const blob = new Blob(this._recordedChunks, {
-                    type: this._mimeType
+        isAvailable(){
+            return this._available;
+        }
+
+        startRecorder(){
+            if(this.isAvailable()){
+                this._mediaRecorder = new MediaRecorder(this._stream, {
+                    mimeType: this._mimeType
                 });
-                const fileName = `rec${Date.now()}.webm`;
-                const file = new File([blob], fileName, {
-                    type: this._mimeType,
-                    lastModified: Date.now()
+                this._recordedChunks = [];
+
+                this._mediaRecorder.addEventListener('dataavailable', e => {
+                    if(e.data.size > 0){
+                        this._recordedChunks.push(e.data);
+                    }
                 });
-                console.log('file', file);
-            });
-            this._mediaRecorder.start();
+
+                this._mediaRecorder.addEventListener('stop', e => {
+                    const blob = new Blob(this._recordedChunks, {
+                        type: this._mimeType
+                    });
+                    const fileName = `rec${Date.now()}.webm`;
+                    const file = new File([blob], fileName, {
+                        type: this._mimeType,
+                        lastModified: Date.now()
+                    });
+                    console.log('file', file);
+                });
+                this._mediaRecorder.start();
+                this.startTimer();
+            }
+        }
+        
+        stopRecorder(){
+            if(this.isAvailable()){
+                this._mediaRecorder.stop();
+                this.stop();
+                this.stopTimer();
+            }
+        }
+
+        startTimer(){
+            const start = Date.now();
+            this._recordMicrophoneInterval = setInterval (()=>{
+                this.trigger('recordtimer', Date.now() - start);
+            }, 100);
+        }
+
+        stopTimer(){
+            clearInterval(this._recordMicrophoneInterval);
         }
     }
-    
-    stopRecorder(){
-        if(this.isAvailable()){
-            this._mediaRecorder.stop();
-            this.stop();
-        }
-    }
-}
