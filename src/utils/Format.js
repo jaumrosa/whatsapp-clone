@@ -9,7 +9,7 @@ export class Format{
 
     static toTime(duration){
         const seconds = parseInt((duration / 1000) % 60);
-        const minutes = parseInt((duration / (1000 * 60 * 60)) % 24);
+        const minutes = parseInt((duration / (1000 * 60)) % 60);
         const hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
         if(hours > 0){

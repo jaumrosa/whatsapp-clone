@@ -2,10 +2,13 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: './src/app.js',
+    entry: {
+        app: './src/app.js',
+        'pdf.worker': 'pdfjs-dist/build/pdf.worker.mjs'
+    },
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        filename: '[name].bundle.js',
+        path: path.join(__dirname, 'dist')
     },
     devServer: {
         static: {
