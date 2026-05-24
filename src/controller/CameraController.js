@@ -17,4 +17,14 @@ export class CameraController {
             track.stop();
         });
     }
+
+    takePicture(mimeType = 'image/png'){
+        const canvas = document.createElement('canvas');
+        canvas.setAttribute('height', this._videoEl.videoHeight);
+        canvas.setAttribute('width', this._videoEl.videoWidth);
+        
+        const context = canvas.getContext('2d');
+        context.drawImage(this._videoEl, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL(mimeType)
+    }
 }
