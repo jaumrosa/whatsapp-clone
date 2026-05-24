@@ -9829,17 +9829,16 @@ html[dir] ._1l3ap{
     position:absolute;
     top:-1px
 }
-._1Y0rl,.bUPnO,.zrbdc{
+.IuYNx,_1Y0rl,.bUPnO,.zrbdc{
     height:100%;
     width:100%
 }
 .IuYNx{
-    height:100%;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    position:absolute;
+    overflow:hidden;
+    top:0
 }
+
 html[dir] ._1l3ap:before{
     border:2px solid rgba(255,255,255,.1);
     border-radius:50%
