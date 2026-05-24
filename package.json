@@ -25,6 +25,7 @@
     "webpack-dev-server": "^5.2.4"
   },
   "dependencies": {
+    "firebase": "^12.13.0",
     "pdfjs-dist": "^5.7.284"
   }
 }
