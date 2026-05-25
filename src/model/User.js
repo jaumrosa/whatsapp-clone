@@ -2,7 +2,7 @@ import {collection, doc, onSnapshot, getDoc, setDoc} from "firebase/firestore";
 import {Firebase} from "../utils/Firebase.js";
 import { Model } from "./Model.js";
 
-export class User extends Model {
+export class User extends Model{
     constructor(id){
         super();
         if(id){
@@ -10,7 +10,7 @@ export class User extends Model {
         }
     }
 
-    get name() {
+    get name(){
         return this._data.name;
     }
 
@@ -18,7 +18,7 @@ export class User extends Model {
         this._data.name = value;
     }
 
-    get email() {
+    get email(){
         return this._data.email;
     }
 
@@ -59,18 +59,39 @@ export class User extends Model {
         )
     }
 
-    static getRef() {
+    static getRef(){
         return collection(Firebase.db(), 'users');
     }
 
-    static findByEmail(email) {
+    static findByEmail(email){
         return doc(User.getRef(), email);
     }
 
+    static getContactsRef(id){
+        const userDoc = doc(User.getRef(), id);
+        return collection(userDoc, 'contacts');
+    }
+
     addContact(contact){
-        const userDoc = doc(User.getRef(), this.email);
-        const contactsRef = collection(userDoc, 'contacts');
-        const contactDoc = doc(contactsRef, btoa(contact.email));
+        const contactDoc = doc(User.getContactsRef(this.email), btoa(contact.email));
         return setDoc(contactDoc, contact.toJSON());
+    }
+
+    getContacts(){
+        return new Promise((s, f) => {
+            onSnapshot(
+                User.getContactsRef(this.email),
+                (docs) => {
+                    let contacts = [];
+                    docs.forEach(doc => {
+                        let data  = doc.data();
+                        data.id = doc.id;
+                        contacts.push(data);
+                    });
+                    this.trigger('contactschange', docs);
+                    s(contacts);
+                }
+            );
+        });
     }
 }
