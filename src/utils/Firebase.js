@@ -21,13 +21,13 @@ export class Firebase {
     }
 
     init() {
-        if (!Firebase._initialized) {
+        if (!window._initializedFirebase) {
             Firebase._app = initializeApp(this._config);
             Firebase._analytics = getAnalytics(Firebase._app);
             Firebase._db = getFirestore(Firebase._app);
             Firebase._storage = getStorage(Firebase._app);
             Firebase._auth = getAuth(Firebase._app);
-            Firebase._initialized = true;
+            window._initializedFirebase = true;
         }
     }
 
