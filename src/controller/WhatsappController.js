@@ -3,7 +3,6 @@ import {CameraController} from './CameraController.js';
 import {MicrophoneController} from './MicrophoneController.js';
 import {DocumentPreviewController} from './DocumentPreviewController.js';
 import {Firebase} from '../utils/Firebase.js';
-import {setDoc} from "firebase/firestore";
 import {User} from '../model/User.js';
 
 export class WhatsAppController {
@@ -17,13 +16,29 @@ export class WhatsAppController {
 
     initAuth(){
         this._firebase.initAuth().then(response => {
-            this._user = new User();
-            const userRef = User.findByEmail(response.user.email);
-            setDoc(userRef, {
-                name: response.user.displayName,
-                email: response.user.email,
-                photo: response.user.photoURL
-            }).then(() => {
+            this._user = new User(response.user.email);
+            this._user.on('datachange', data =>{
+                document.querySelector('title').innerHTML = data.name + ' - WhatsApp Clone';
+
+                this.el.inputNamePanelEditProfile.innerHTML = data.name;
+
+                if(data.photo){
+                    const photo = this.el.imgPanelEditProfile;
+                    photo.src = data.photo;
+                    photo.show();
+                    this.el.imgDefaultPanelEditProfile.hide();
+
+                    const mainPhoto = this.el.myPhoto.querySelector('img');
+                    mainPhoto.src = data.photo;
+                    mainPhoto.show();
+                }
+            });
+
+            this._user.name = response.user.displayName;
+            this._user.email = response.user.email;
+            this._user.photo = response.user.photoURL;
+
+            this._user.save().then(() => {
                 this.el.appContent.show();
             });
             
