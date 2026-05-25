@@ -2,14 +2,24 @@ import {Format} from '../utils/Format.js';
 import {CameraController} from './CameraController.js';
 import {MicrophoneController} from './MicrophoneController.js';
 import {DocumentPreviewController} from './DocumentPreviewController.js';
-import { Firebase } from '../utils/Firebase.js';
+import {Firebase} from '../utils/Firebase.js';
 
 export class WhatsAppController {
     constructor() {
+        this._firebase = new Firebase();
+        this.initAuth();
         this.elementsPrototype();
         this.loadElements();
         this.initEvents();
-        this._firebase = new Firebase();
+    }
+
+    initAuth(){
+        this._firebase.initAuth().then(response => {
+            this._user = response.user;
+            this.el.appContent.show();
+        }).catch(err => {
+            console.error(err);
+        })
     }
 
     loadElements(){

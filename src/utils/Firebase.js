@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics }  from "firebase/analytics";
-import { getFirestore }  from "firebase/firestore";
-import { getStorage }    from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAuth, GoogleAuthProvider,
+         signInWithPopup } from "firebase/auth";
 
 export class Firebase {
     constructor() {
@@ -24,6 +26,7 @@ export class Firebase {
             Firebase._analytics = getAnalytics(Firebase._app);
             Firebase._db = getFirestore(Firebase._app);
             Firebase._storage = getStorage(Firebase._app);
+            Firebase._auth = getAuth(Firebase._app);
             Firebase._initialized = true;
         }
     }
@@ -34,5 +37,25 @@ export class Firebase {
 
     static hd() {
         return Firebase._storage;
+    }
+
+    initAuth() {
+        return new Promise((s, f) => {
+            const provider = new GoogleAuthProvider();              
+            signInWithPopup(Firebase._auth, provider)              
+                .then(result => {
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential?.accessToken;
+                    const user = result.user; 
+
+                    s({
+                        user,
+                        token
+                    });
+                })
+                .catch(err => {
+                    f(err);
+                });
+        });
     }
 }
