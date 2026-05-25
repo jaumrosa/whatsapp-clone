@@ -1,4 +1,4 @@
-import {collection, doc, onSnapshot, setDoc} from "firebase/firestore";
+import {collection, doc, onSnapshot, getDoc, setDoc} from "firebase/firestore";
 import {Firebase} from "../utils/Firebase.js";
 import { Model } from "./Model.js";
 
@@ -65,5 +65,12 @@ export class User extends Model {
 
     static findByEmail(email) {
         return doc(User.getRef(), email);
+    }
+
+    addContact(contact){
+        const userDoc = doc(User.getRef(), this.email);
+        const contactsRef = collection(userDoc, 'contacts');
+        const contactDoc = doc(contactsRef, btoa(contact.email));
+        return setDoc(contactDoc, contact.toJSON());
     }
 }
