@@ -5,6 +5,7 @@ import {DocumentPreviewController} from './DocumentPreviewController.js';
 import {Firebase} from '../utils/Firebase.js';
 import {User} from '../model/User.js';
 import {Chat} from '../model/Chat.js';
+import {Message} from '../model/Message.js';
 
 export class WhatsAppController {
     constructor() {
@@ -110,21 +111,26 @@ export class WhatsAppController {
                     img.show();
                 }
                 div.on('click', e => {
-                    this.el.activeName.innerHTML = contact.name;
-                    this.el.activeStatus.innerHTML = contact.status;
-                    if(contact.photo){
-                        let img = this.el.activePhoto;
-                        img.src = contact.photo;
-                        img.show();
-                    }
-                    this.el.home.hide();
-                    this.el.main.show();
+                    this.setActiveChat(contact);    
                 });
                 this.el.contactsMessagesList.appendChild(div);
             });
         });
 
         this._user.getContacts();
+    }
+
+    setActiveChat(contact){
+        this._contactActive = contact;
+        this.el.activeName.innerHTML = contact.name;
+        this.el.activeStatus.innerHTML = contact.status;
+        if(contact.photo){
+            let img = this.el.activePhoto;
+            img.src = contact.photo;
+            img.show();
+        }
+        this.el.home.hide();
+        this.el.main.show();
     }
 
     loadElements(){
@@ -451,7 +457,14 @@ export class WhatsAppController {
         });
 
         this.el.btnSend.on('click', e => {
-            console.log(this.el.inputText.innerHTML);
+            Message.send(
+                this._contactActive.chatId,
+                this._user.email,
+                'text',
+                this.el.inputText.innerHTML
+            );
+            this.el.inputText.innerHTML = '';
+            this.el.panelEmojis.removeClass('open');
         });
 
         this.el.btnEmojis.on('click', e => {

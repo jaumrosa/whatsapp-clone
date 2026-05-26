@@ -1,4 +1,6 @@
-import  {Model} from "./Model";
+import  {Model} from "./Model.js";
+import { collection, doc, addDoc } from "firebase/firestore";  // ✅ imports necessários
+import { Firebase } from "../utils/Firebase.js";
 
 export class Message extends Model {
     constructor(){
@@ -297,5 +299,24 @@ export class Message extends Model {
         div.firstElementChild.classList.add(className);
 
         return div;
+    }
+
+    static send(chatId, from, type, content) {
+    return addDoc(Message.getRef(chatId), {    
+        content,
+        timeStamp: new Date(),
+        status: 'wait',
+        type,
+        from
+        });
+    }
+
+    static getRef(chatId) {
+        return collection(                          
+            Firebase.db(),
+            'chats',
+            chatId,
+            'messages'
+        );
     }
 }
