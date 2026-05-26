@@ -34,18 +34,26 @@ export class User extends Model{
         this._data.photo = value;
     }
 
+    get chatId() {
+        return this._data.chatId;
+    }
+
+    set chatId(value){
+        this._data.chatId = value;
+    }
+
     
 
 
     getById(id){
-        return new Promise((s, f) => {
+        return new Promise((s, f) => {  
             onSnapshot(
                 User.findByEmail(id),
                 (doc) => {
                     this.fromJSON(doc.data());
                     s(doc);
-                
-                }, (err => {
+                }, 
+                (err => {
                     f(err);
                 })
             );
