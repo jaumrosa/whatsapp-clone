@@ -1,3 +1,4 @@
+import { collection, doc, addDoc, query, orderBy, onSnapshot } from "firebase/firestore";
 import {Format} from '../utils/Format.js';
 import {CameraController} from './CameraController.js';
 import {MicrophoneController} from './MicrophoneController.js';
@@ -121,6 +122,9 @@ export class WhatsAppController {
     }
 
     setActiveChat(contact){
+        if(this._contactActive){
+            onSnapshot(Message.getRef(this._contactActive.chatId), () => {});
+        }
         this._contactActive = contact;
         this.el.activeName.innerHTML = contact.name;
         this.el.activeStatus.innerHTML = contact.status;
@@ -131,6 +135,23 @@ export class WhatsAppController {
         }
         this.el.home.hide();
         this.el.main.show();
+
+        const q = query(
+        Message.getRef(this._contactActive.chatId),
+        orderBy('timeStamp')  
+        );
+
+        onSnapshot(q, docs => {                
+            this.el.panelMessagesContainer.innerHTML = '';
+            docs.forEach(doc => {
+                const data    = doc.data();
+                const message = new Message();
+                message.fromJSON(data);
+                const me   = (data.from === this._user.email);
+                const view = message.getViewElement(me);
+                this.el.panelMessagesContainer.appendChild(view);
+            });
+        });
     }
 
     loadElements(){
