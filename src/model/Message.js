@@ -1,6 +1,7 @@
 import  {Model} from "./Model.js";
-import { collection, doc, addDoc } from "firebase/firestore";  // ✅ imports necessários
-import { Firebase } from "../utils/Firebase.js";
+import {Format} from "../utils/Format.js";
+import {collection, doc, addDoc} from "firebase/firestore";  // ✅ imports necessários
+import {Firebase} from "../utils/Firebase.js";
 
 export class Message extends Model {
     constructor(){
@@ -19,11 +20,11 @@ export class Message extends Model {
     set type(value){
         return this._data.type = value;
     }
-    get timestamp(){
-        return this._data.timestamp;
+    get timeStamp(){
+        return this._data.timeStamp;
     }
-    set timestamp(value){
-        return this._data.timestamp = value;
+    set timeStamp(value){
+        return this._data.timeStamp = value;
     }
     get status(){
         return this._data.status;
@@ -31,9 +32,17 @@ export class Message extends Model {
     set status(value){
         return this._data.status = value;
     }
+    get id(){
+        return this._data.id;
+    }
+    set id(value){
+        return this._data.id = value;
+    }
+
+
 
     getViewElement(me = true){
-        const div = document.createElement(div);
+        const div = document.createElement('div');
         div.className = 'message';
         switch(this.type){
             case 'contact':
@@ -277,16 +286,16 @@ export class Message extends Model {
 
             default:
                 div.innerHTML = `
-                    <div class="font-style _3DFk6 tail">
+                    <div class="font-style _3DFk6 tail" id ="_${this.id}">
                         <span class="tail-container"></span>
                         <span class="tail-container highlight"></span>
                         <div class="Tkt2p">
                             <div class="_3zb-j ZhF0n">
-                                <span dir="ltr" class="selectable-text invisible-space message-text">Oi!</span>
+                                <span dir="ltr" class="selectable-text invisible-space message-text">${this.content}</span>
                             </div>
                             <div class="_2f-RV">
                                 <div class="_1DZAH">
-                                    <span class="msg-time">11:33</span>
+                                    <span class="msg-time">${Format.timeStamptoTime(this.timeStamp)}</span>
                                 </div>
                             </div>
                         </div>

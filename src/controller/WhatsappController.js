@@ -144,12 +144,15 @@ export class WhatsAppController {
         onSnapshot(q, docs => {                
             this.el.panelMessagesContainer.innerHTML = '';
             docs.forEach(doc => {
-                const data    = doc.data();
-                const message = new Message();
-                message.fromJSON(data);
-                const me   = (data.from === this._user.email);
-                const view = message.getViewElement(me);
-                this.el.panelMessagesContainer.appendChild(view);
+                const data = doc.data();
+                data.id = doc.id;
+                if (!this.el.panelMessagesContainer.querySelector('#_'  + data.id)){
+                    const message = new Message();
+                    message.fromJSON(data);
+                    const me = (data.from === this._user.email);
+                    const view = message.getViewElement(me);
+                    this.el.panelMessagesContainer.appendChild(view);
+                }  
             });
         });
     }
