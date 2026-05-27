@@ -84,7 +84,7 @@ export class WhatsAppController {
                                 <span dir="auto" title="${contact.name}" class="_1wjpf">${contact.name}</span>
                             </div>
                             <div class="_3Bxar">
-                                <span class="_3T2VG">${contact.LastMessageTime}</span>
+                                <span class="_3T2VG">${Format.timeStamptoTime(contact.LastMessageTime)}</span>
                             </div>
                         </div>
                         <div class="_1AwDx">
