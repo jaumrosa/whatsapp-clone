@@ -1,4 +1,4 @@
-import { collection, doc, addDoc, query, orderBy, onSnapshot } from "firebase/firestore";
+import {collection, doc, addDoc, query, orderBy, onSnapshot, updateDoc} from "firebase/firestore";
 import {Format} from '../utils/Format.js';
 import {CameraController} from './CameraController.js';
 import {MicrophoneController} from './MicrophoneController.js';
@@ -150,13 +150,21 @@ export class WhatsAppController {
             docs.forEach(doc => {
                 const data = doc.data();
                 data.id = doc.id;
+                const message = new Message();
+                message.fromJSON(data);
+                const me = (data.from === this._user.email);
                 if (!this.el.panelMessagesContainer.querySelector('#_'  + data.id)){
-                    const message = new Message();
-                    message.fromJSON(data);
-                    const me = (data.from === this._user.email);
+                    if (!me){
+                        updateDoc(doc.ref, {
+                            status: 'read'
+                        });
+                    }
                     const view = message.getViewElement(me);
                     this.el.panelMessagesContainer.appendChild(view);
-                }  
+                } else if (me) {
+                    let msgEl = this.el.panelMessagesContainer.querySelector('#_'  + data.id);
+                    msgEl.querySelector('.message-status').innerHTML = message.getStatusViewElement().outerHTML;
+                }
             });
             if (autoScroll) {
                 this.el.panelMessagesContainer.scrollTop = (this.el.panelMessagesContainer.scrollHeight - this.el.panelMessagesContainer.offsetHeight);
