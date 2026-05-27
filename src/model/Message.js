@@ -3,6 +3,7 @@ import {Format} from "../utils/Format.js";
 import {collection, doc, addDoc, updateDoc, setDoc} from "firebase/firestore";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {Firebase} from "../utils/Firebase.js";
+import {Upload} from "../utils/Upload.js";
 
 export class Message extends Model {
     constructor(){
@@ -414,17 +415,7 @@ export class Message extends Model {
     }
 
     static upload(file, from){
-        return new Promise((s, f) => {
-        const storageRef = ref(Firebase.hd(), `${from}/${Date.now()}_${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on('state_changed', e => {
-            console.info('upload', e);
-        }, err => {
-            f(err);
-        }, () => {
-                s(uploadTask.snapshot.ref);
-            });
-        })
+        return Upload.send(file, from);
     }
 
     static sendAudio(chatId, from, file, metadata, photo){
