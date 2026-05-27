@@ -1,4 +1,4 @@
-    import {collection, doc, onSnapshot, getDoc, setDoc} from "firebase/firestore";
+    import {collection, doc, onSnapshot, getDoc, setDoc, query, where} from "firebase/firestore";
     import {Firebase} from "../utils/Firebase.js";
     import { Model } from "./Model.js";
 
@@ -85,15 +85,19 @@
             return setDoc(contactDoc, contact.toJSON());
         }
 
-        getContacts(){
+        getContacts(filter = '') {
             return new Promise((s, f) => {
-                onSnapshot(
-                    User.getContactsRef(this.email),
+                onSnapshot(  
+                    query(
+                        User.getContactsRef(this.email),
+                        where('name', '>=', filter),
+                        where('name', '<=', filter + '\uf8ff')
+                    ),
                     (docs) => {
                         let contacts = [];
                         docs.forEach(doc => {
-                            let data  = doc.data();
-                            data.id = doc.id;
+                            let data = doc.data();
+                            data.id  = doc.id;
                             contacts.push(data);
                         });
                         this.trigger('contactschange', docs);
