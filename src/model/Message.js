@@ -1,6 +1,7 @@
 import  {Model} from "./Model.js";
 import {Format} from "../utils/Format.js";
 import {collection, doc, addDoc, updateDoc} from "firebase/firestore";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {Firebase} from "../utils/Firebase.js";
 
 export class Message extends Model {
@@ -106,13 +107,8 @@ export class Message extends Model {
                                             </div>
                                         </div>
                                     </div>
-                                    <img src="#" class="_1JVSX message-photo" style="width: 100%; display:none">
+                                    <img src="${this.content}" class="_1JVSX message-photo" style="width: 100%; display:none">
                                     <div class="_1i3Za"></div>
-                                </div>
-                                <div class="message-container-legend">
-                                    <div class="_3zb-j ZhF0n">
-                                        <span dir="ltr" class="selectable-text invisible-space copyable-text message-text">Texto da foto</span>
-                                    </div>
                                 </div>
                                 <div class="_2TvOE">
                                     <div class="_1DZAH text-white" role="button">
@@ -131,6 +127,14 @@ export class Message extends Model {
                         </div>
                     </div>
                 `;
+                div.querySelector('.message-photo').on('load', e => {
+                    div.querySelector('.message-photo').show()
+                    div.querySelector('._34Olu').hide();
+                    div.querySelector('._3v3PK').css({
+                        height: 'auto'
+                    });
+                });
+
                 break;
 
             case 'document':
@@ -286,6 +290,23 @@ export class Message extends Model {
         div.firstElementChild.classList.add(className);
 
         return div;
+    }
+
+    static sendImage(chatId, from, file){
+        return new Promise((s, f) => {
+            const storageRef = ref(Firebase.hd(), `${from}/${Date.now()}_${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on('state_changed', e => {
+                console.info('upload', e);
+            }, err => {
+                console.error(err);
+            }, () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                    Message.send(chatId, from, 'image', url).then(s);
+                });
+            });
+        })
+        
     }
 
     static send(chatId, from, type, content) {
