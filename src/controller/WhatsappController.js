@@ -3,11 +3,13 @@ import {Format} from '../utils/Format.js';
 import {CameraController} from './CameraController.js';
 import {MicrophoneController} from './MicrophoneController.js';
 import {DocumentPreviewController} from './DocumentPreviewController.js';
+import {ContactsController} from "./ContactsController.js";
 import {Firebase} from '../utils/Firebase.js';
 import {User} from '../model/User.js';
 import {Chat} from '../model/Chat.js';
 import {Message} from '../model/Message.js';
 import {Base64} from "../utils/Base64.js";
+
 
 export class WhatsAppController {
     constructor() {
@@ -505,11 +507,19 @@ export class WhatsAppController {
         });
 
         this.el.btnAttachContact.on('click', e => {
-            this.el.modalContacts.show();
+            this._contactsController = new ContactsController(this.el.modalContacts, this._user);
+            this._contactsController.on('select', contact => {
+                Message.sendContact(
+                    this._contactActive.chatId,
+                    this._user.email,
+                    contact
+                )
+            })
+            this._contactsController.open();
         });
 
         this.el.btnCloseModalContacts.on('click', e => {
-            this.el.modalContacts.hide();
+            this._contactsController.close();
         });
 
         this.el.btnSendMicrophone.on('click', e => {
