@@ -7,6 +7,7 @@ import {Firebase} from '../utils/Firebase.js';
 import {User} from '../model/User.js';
 import {Chat} from '../model/Chat.js';
 import {Message} from '../model/Message.js';
+import {Base64} from "../utils/Base64.js";
 
 export class WhatsAppController {
     constructor() {
@@ -161,7 +162,12 @@ export class WhatsAppController {
                     }
                     const view = message.getViewElement(me);
                     this.el.panelMessagesContainer.appendChild(view);
-                } else if (me) {
+                } else {
+                    const view = message.getViewElement(me);
+                    this.el.panelMessagesContainer.querySelector('#_'  + data.id).innerHTML = view.innerHTML;
+                } 
+                    
+                if(this.el.panelMessagesContainer.querySelector('#_'  + data.id) && me) {
                     let msgEl = this.el.panelMessagesContainer.querySelector('#_'  + data.id);
                     msgEl.querySelector('.message-status').innerHTML = message.getStatusViewElement().outerHTML;
                 }
@@ -484,7 +490,18 @@ export class WhatsAppController {
         });
 
         this.el.btnSendDocument.on('click', e => {
-            console.log('send document');
+            const file = this.el.inputDocument.files[0];
+            const base64 = this.el.imgPanelDocumentPreview.src;
+            if(file.type === 'application/pdf'){
+                Base64.toFile(base64).then(filePreview => {
+                    Message.sendDocument(this._contactActive.chatId, this._user.email, file, filePreview, this.el.infoPanelDocumentPreview.innerHTML);
+                });
+            } else {
+                Message.sendDocument(this._contactActive.chatId, this._user.email, file);
+            }
+
+            this.el.btnClosePanelDocumentPreview.click();
+            
         });
 
         this.el.btnAttachContact.on('click', e => {
