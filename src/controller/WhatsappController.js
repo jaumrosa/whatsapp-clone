@@ -165,7 +165,7 @@ export class WhatsAppController {
                     }
                     this.el.panelMessagesContainer.appendChild(view);
                 } else {
-                    const parent = his.el.panelMessagesContainer.querySelector('#_'  + data.id).parentNode;
+                    const parent = this.el.panelMessagesContainer.querySelector('#_'  + data.id).parentNode;
                     parent.replaceChild(view, this.el.panelMessagesContainer.querySelector('#_'  + data.id));
                 } 
                     
@@ -556,6 +556,15 @@ export class WhatsAppController {
         });
 
         this.el.btnFinishMicrophone.on('click', e => {
+            this._MicrophoneController.on('recorded', (file, metadata) => {
+                Message.sendAudio(
+                    this._contactActive.chatId,
+                    this._user.email,
+                    file,
+                    metadata,
+                    this._user.photo
+                )
+            })
             this._MicrophoneController.stopRecorder();
             this.closeRecordMicrophone();
         });

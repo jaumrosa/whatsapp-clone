@@ -44,11 +44,20 @@
                         type: this._mimeType
                     });
                     const fileName = `rec${Date.now()}.webm`;
-                    const file = new File([blob], fileName, {
-                        type: this._mimeType,
-                        lastModified: Date.now()
-                    });
-                    console.log('file', file);
+                    const audioContext = new AudioContext();
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        audioContext.decodeAudioData(reader.result).then(decode => {
+                            const file = new File([blob], fileName, {
+                                type: this._mimeType,
+                                lastModified: Date.now()
+                            });
+                            this.trigger('recorded', file, decode);
+                        }); 
+                    }
+                    
+                    reader.readAsArrayBuffer(blob)
+                    
                 });
                 this._mediaRecorder.start();
                 this.startTimer();
