@@ -156,22 +156,37 @@ export class WhatsAppController {
                 const message = new Message();
                 message.fromJSON(data);
                 const me = (data.from === this._user.email);
+                const view = message.getViewElement(me);
                 if (!this.el.panelMessagesContainer.querySelector('#_'  + data.id)){
                     if (!me){
                         updateDoc(doc.ref, {
                             status: 'read'
                         });
                     }
-                    const view = message.getViewElement(me);
                     this.el.panelMessagesContainer.appendChild(view);
                 } else {
-                    const view = message.getViewElement(me);
-                    this.el.panelMessagesContainer.querySelector('#_'  + data.id).innerHTML = view.innerHTML;
+                    const parent = his.el.panelMessagesContainer.querySelector('#_'  + data.id).parentNode;
+                    parent.replaceChild(view, this.el.panelMessagesContainer.querySelector('#_'  + data.id));
                 } 
                     
                 if(this.el.panelMessagesContainer.querySelector('#_'  + data.id) && me) {
                     let msgEl = this.el.panelMessagesContainer.querySelector('#_'  + data.id);
                     msgEl.querySelector('.message-status').innerHTML = message.getStatusViewElement().outerHTML;
+                }
+
+                if(message.type === 'contact'){
+                    view.querySelector('.btn-message-send').on('click', e => {
+                        Chat.createIfNotExists(this._user.email, message.content.email).then(chat => {
+                            const contact = new User(message.content.email)
+                            contact.on('datachange', data => {
+                                contact.chatId = chat.id;
+                                this._user.addContact(contact);
+                                this._user.chatId =  chat.id;
+                                contact.addContact(this._user);
+                                this.setActiveChat(contact);
+                            });
+                        });
+                    });
                 }
             });
             if (autoScroll) {
@@ -503,7 +518,6 @@ export class WhatsAppController {
             }
 
             this.el.btnClosePanelDocumentPreview.click();
-            
         });
 
         this.el.btnAttachContact.on('click', e => {
