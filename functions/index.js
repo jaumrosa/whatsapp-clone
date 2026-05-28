@@ -2,41 +2,32 @@ const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
-
 const db = admin.firestore();
 
-/**
- * Base64 encode
- */
 function encode64(text) {
     return Buffer.from(text).toString("base64");
 }
 
-/**
- * Base64 decode
- */
 function decode64(text) {
     return Buffer.from(text, "base64").toString("utf8");
 }
 
-/**
- * Atualiza última mensagem do contato
- */
+function getLastMessagePreview(msg) {
+    switch (msg.type) {
+        case 'image':    return '📷 Imagem';
+        case 'audio':    return '🎤 Áudio';
+        case 'document': return `📄 ${msg.filename || 'Documento'}`;
+        case 'contact':  return '👤 Contato';
+        default:         return msg.content || '';
+    }
+}
+
 exports.saveLastMessage = onDocumentCreated(
     "chats/{chatId}/messages/{messageId}",
     async (event) => {
-
         try {
-
-            const chatId = event.params.chatId;
+            const chatId    = event.params.chatId;
             const messageId = event.params.messageId;
-
-            console.log("[CHAT ID]", chatId);
-            console.log("[MESSAGE ID]", messageId);
-
-            /**
-             * Mensagem criada
-             */
             const messageDoc = event.data.data();
 
             if (!messageDoc) {
@@ -44,88 +35,79 @@ exports.saveLastMessage = onDocumentCreated(
                 return null;
             }
 
-            console.log("[MESSAGE DATA]", messageDoc);
-
             const userFrom = messageDoc.from;
-
             if (!userFrom) {
                 console.error("[ERROR] Campo FROM ausente");
                 return null;
             }
 
-            /**
-             * Busca chat
-             */
-            const chatSnap = await db
-                .collection("chats")
-                .doc(chatId)
-                .get();
+            let userTo = null;
 
-            if (!chatSnap.exists) {
-                console.error("[ERROR] Chat não encontrado");
-                return null;
+            const chatSnap = await db.collection("chats").doc(chatId).get();
+
+            if (chatSnap.exists) {
+                const chatDoc = chatSnap.data();
+                const users = Object.keys(chatDoc.users);
+                const userToEncoded = users.find(u => u !== encode64(userFrom));
+                if (userToEncoded) userTo = decode64(userToEncoded);
+
+            } else {
+                console.warn("[WARN] Ghost document detectado. Buscando destinatário via contacts...");
+
+                const contactsSnap = await db
+                    .collection("users")
+                    .doc(userFrom)
+                    .collection("contacts")
+                    .get();
+
+                for (const contactDoc of contactsSnap.docs) {
+                    const data = contactDoc.data();
+                    if (data.chatId === chatId) {
+                        userTo = data.email;
+                        break;
+                    }
+                }
+
+                if (userTo) {
+                    const users = {};
+                    users[encode64(userFrom)] = true;
+                    users[encode64(userTo)]   = true;
+
+                    await db.collection("chats").doc(chatId).set({
+                        users,
+                        timeStamp: admin.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log("[INFO] Chat document recriado com sucesso:", chatId);
+                }
             }
 
-            const chatDoc = chatSnap.data();
-
-            console.log("[CHAT DATA]", chatDoc);
-
-            /**
-             * Descobre destinatário
-             */
-            const users = Object.keys(chatDoc.users);
-
-            const userToEncoded = users.filter(user => {
-                return user !== encode64(userFrom);
-            })[0];
-
-            if (!userToEncoded) {
+            if (!userTo) {
                 console.error("[ERROR] Destinatário não encontrado");
                 return null;
             }
 
-            const userTo = decode64(userToEncoded);
-
             console.log("[FROM]", userFrom);
-            console.log("[TO]", userTo);
+            console.log("[TO]",   userTo);
 
-            /**
-             * Atualiza contato do destinatário
-             */
-            await db
-                .collection("users")
-                .doc(userTo)
-                .collection("contacts")
-                .doc(encode64(userFrom))
-                .set({
-                    lastMessage: messageDoc.content || "",
-                    lastMessageTime: admin.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
+            const lastMessage     = getLastMessagePreview(messageDoc);
+            const lastMessageTime = admin.firestore.FieldValue.serverTimestamp();
 
-            /**
-             * Atualiza contato do remetente
-             */
             await db
-                .collection("users")
-                .doc(userFrom)
-                .collection("contacts")
-                .doc(encode64(userTo))
-                .set({
-                    lastMessage: messageDoc.content || "",
-                    lastMessageTime: admin.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
+                .collection("users").doc(userTo)
+                .collection("contacts").doc(encode64(userFrom))
+                .set({ lastMessage, lastMessageTime }, { merge: true });
+
+            await db
+                .collection("users").doc(userFrom)
+                .collection("contacts").doc(encode64(userTo))
+                .set({ lastMessage, lastMessageTime }, { merge: true });
 
             console.log("[FINISH]", new Date());
-
             return true;
 
         } catch (err) {
-
             console.error("[ERROR]", err);
-
             return null;
-
         }
-
     }
 );

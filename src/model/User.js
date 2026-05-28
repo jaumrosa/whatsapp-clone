@@ -82,7 +82,7 @@
 
         addContact(contact){
             const contactDoc = doc(User.getContactsRef(this.email), btoa(contact.email));
-            return setDoc(contactDoc, contact.toJSON());
+            return setDoc(contactDoc, contact.toJSON(), {merge: true});
         }
 
         getContacts(filter = '') {
