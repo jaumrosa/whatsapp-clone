@@ -182,7 +182,7 @@ export class WhatsAppController {
         }
         this._contactActive = contact;
         this.el.activeName.innerHTML = contact.name;
-        this.el.activeStatus.innerHTML = contact.status;
+        this.el.activeStatus.innerHTML = contact.status || 'online';
         if(contact.photo){
             let img = this.el.activePhoto;
             img.src = contact.photo;
