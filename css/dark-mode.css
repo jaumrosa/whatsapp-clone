@@ -1,0 +1,760 @@
+/* ============================================================
+   DARK MODE — WhatsApp Clone
+   ThemeController aplica data-theme="dark" no <body>
+   ============================================================ */
+
+/* ── Smooth transitions ── */
+body, #side, #main, #home,
+._3auIg, ._2jVLL, ._3AwwN,
+.contact-item, .panel-left, .panel-main,
+._3F6QL, .font-style, ._3_7SH, .Tkt2p,
+._3CPl4, .gQzdc, ._1NrpZ,
+._3q4NP, ._1Iexl, #app, ._3qlW9,
+._2fq0t, ._2sNbV, ._1CRb5, ._1FroB,
+.wDFKR, ._3gUiM, ._1CnF3, ._15JHr,
+._3lLzD, ._2dA13, ._2bXVy {
+    transition:
+        background-color 0.25s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+/* ============================================================
+   TOGGLE SOL/LUA — alinhamento e cor
+   ============================================================ */
+#btn-theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* mesmo tamanho visual que os outros rAUz7 */
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    outline: none;
+    position: relative;
+}
+
+/* icon animations */
+#btn-theme-toggle svg {
+    transition: opacity 0.25s, transform 0.35s;
+    position: absolute;
+}
+#btn-theme-toggle .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+#btn-theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+
+/* Modo claro: sol com mesma cor dos ícones do header (#263238, 55% opacity) */
+#btn-theme-toggle .icon-sun path {
+    fill: #263238;
+    fill-opacity: 0.55;
+}
+
+/* Modo escuro: troca ícones */
+body[data-theme="dark"] #btn-theme-toggle .icon-sun  { opacity: 0; transform: rotate(90deg) scale(0.6); }
+body[data-theme="dark"] #btn-theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+
+/* Modo escuro: lua com cor dos demais ícones */
+body[data-theme="dark"] #btn-theme-toggle .icon-moon path {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+/* ── Body & App ── */
+body[data-theme="dark"] {
+    background-color: #0b141a !important;
+    background-image: none !important;
+    color: #e9edef !important;
+}
+body[data-theme="dark"] #app,
+body[data-theme="dark"] .app-wrapper-web,
+body[data-theme="dark"] #app-content {
+    background-color: #0b141a;
+}
+
+/* ── Wrapper raiz do app (_3dqpi) ──
+   html[dir] ._3dqpi { background-color: #f7f7f7 } — esse background aparece
+   em gaps entre colunas. Sobrescrevemos apenas a cor, sem tocar no layout. */
+html[dir] body[data-theme="dark"] ._3dqpi {
+    background-color: #111b21 !important;
+}
+
+/* ── MZIyP é position:absolute/z-index:9999 — NÃO recebe background,
+   senão encobre toda a tela. Os panels dentro dele já têm suas cores. ── */
+
+/* ── _3q4NP: ambas as colunas (sidebar k1feT e chat _1Iexl).
+   Inclui !important para superar a regra de overflow:hidden do style.css. ── */
+body[data-theme="dark"] ._3q4NP,
+body[data-theme="dark"] ._3q4NP.k1feT {
+    background-color: transparent !important;
+}
+
+/* ── Sidebar ── */
+body[data-theme="dark"] #side,
+body[data-theme="dark"] .swl8g {
+    background-color: #111b21;
+    border-right: 1px solid #2a3942;
+}
+body[data-theme="dark"] .m6ZEb {
+    background-color: #111b21;
+}
+
+/* ── Sidebar Header ── */
+body[data-theme="dark"] ._3auIg {
+    background-color: #202c33 !important;
+}
+/*
+   Ícones do header (chat, menu, sol/lua):
+   Cobre SOMENTE os path com fill duro #263238 ou fill-opacity baixo.
+   NÃO usamos "svg path" genérico aqui para não matar os ícones coloridos de anexo.
+*/
+body[data-theme="dark"] ._3auIg svg path[fill="#263238"],
+body[data-theme="dark"] ._3auIg svg path[fill="#263238"][fill-opacity],
+body[data-theme="dark"] ._3auIg svg path[fill-opacity=".55"],
+body[data-theme="dark"] ._3auIg svg path[fill-opacity=".6"],
+body[data-theme="dark"] ._3auIg svg path[fill-opacity=".45"] {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ── Avatares / círculos de foto (_1WliW + _3ZW2E) ── */
+body[data-theme="dark"] ._1WliW {
+    background-color: #2a3942 !important;
+}
+/* Círculo externo do SVG default-user */
+body[data-theme="dark"] ._3ZW2E svg path[fill="#DFE5E7"],
+body[data-theme="dark"] ._3ZW2E svg path[fill="#dfe5e7"] {
+    fill: #3b4a54 !important;
+}
+/* Silhueta branca do boneco */
+body[data-theme="dark"] ._3ZW2E svg g path[fill="#FFF"],
+body[data-theme="dark"] ._3ZW2E svg g path[fill="#fff"],
+body[data-theme="dark"] ._3ZW2E svg g path[fill="white"] {
+    fill: #aebac1 !important;
+}
+
+/* ── Sidebar search bar ── */
+body[data-theme="dark"] ._3CPl4 {
+    background-color: #111b21;
+    padding: 8px 12px;
+}
+body[data-theme="dark"] .gQzdc {
+    background-color: #2a3942;
+    border-radius: 8px;
+}
+body[data-theme="dark"] ._2cLHw,
+body[data-theme="dark"] #input-search-contacts-placeholder {
+    color: #8696a0 !important;
+    background: transparent;
+}
+body[data-theme="dark"] #input-search-contacts {
+    color: #e9edef;
+    background: transparent;
+}
+body[data-theme="dark"] .gQzdc svg path[fill="#263238"],
+body[data-theme="dark"] .gQzdc svg path[fill="#4FC3F7"] {
+    fill: #8696a0 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ── Contact list pane ── */
+body[data-theme="dark"] ._1NrpZ {
+    background-color: #111b21;
+}
+
+/*
+   html[dir] .contact-item { background-color: #fff } no style.css tem alta especificidade.
+   Para sobrescrever, precisamos incluir html[dir] no seletor.
+*/
+html[dir] body[data-theme="dark"] .contact-item {
+    background-color: #111b21 !important;
+    border-bottom: 1px solid #2a3942;
+    cursor: pointer;
+}
+html[dir] body[data-theme="dark"] .contact-item:hover,
+html[dir] body[data-theme="dark"] .contact-item._3df_h {
+    background-color: #2a3942 !important;
+}
+html[dir] body[data-theme="dark"] .contact-item.active {
+    background-color: #2a3942 !important;
+}
+
+/* Nome do contato: ._25Ooe { color: #000 } no style.css */
+body[data-theme="dark"] ._25Ooe,
+body[data-theme="dark"] ._1wjpf {
+    color: #e9edef !important;
+}
+
+/* Hora e última mensagem */
+body[data-theme="dark"] ._3T2VG,
+body[data-theme="dark"] ._3NFp9,
+body[data-theme="dark"] ._2_LEW span,
+body[data-theme="dark"] ._1AwDx span,
+body[data-theme="dark"] ._1AwDx ._3NFp9 {
+    color: #8696a0 !important;
+}
+
+/* Contato ativo — nome em destaque */
+body[data-theme="dark"] .contact-item.active ._1AwDx,
+body[data-theme="dark"] .contact-item.active ._25Ooe {
+    color: #e9edef !important;
+}
+
+/* ── Linha separadora interna dos contatos (_3j7s9) ── */
+/* html[dir] ._3j7s9 { border-top: 1px solid #f2f2f2 } no style.css */
+html[dir] body[data-theme="dark"] ._3j7s9 {
+    border-top-color: #2a3942 !important;
+}
+html[dir] body[data-theme="dark"] .contact-item._3df_h ._3j7s9,
+html[dir] body[data-theme="dark"] .contact-item:hover ._3j7s9 {
+    border-top-color: #2a3942 !important;
+}
+html[dir] body[data-theme="dark"] .contact-item.active ._3j7s9,
+html[dir] body[data-theme="dark"] .contact-item.active:after {
+    border-top-color: #2a3942 !important;
+}
+/* Ícone de check na lista */
+body[data-theme="dark"] ._1VfKB svg path[fill="#263238"] {
+    fill: #8696a0 !important;
+    fill-opacity: 1 !important;
+}
+/* Seção "CONTATOS" */
+body[data-theme="dark"] ._1AKfk {
+    color: #00a884;
+    background-color: #111b21;
+}
+/* Items de contato no modal */
+body[data-theme="dark"] .JSbIY,
+body[data-theme="dark"] ._2EXPL {
+    background-color: #111b21;
+}
+body[data-theme="dark"] .JSbIY:hover,
+body[data-theme="dark"] ._2EXPL:hover {
+    background-color: #2a3942;
+}
+body[data-theme="dark"] .contact-name {
+    color: #e9edef !important;
+}
+
+/* ── Main chat area ── */
+body[data-theme="dark"] #main,
+body[data-theme="dark"] ._1GX8_,
+body[data-theme="dark"] ._3zJZ2 {
+    background-color: #0b141a;
+}
+body[data-theme="dark"] .YUoyu {
+    background-color: #0b141a;
+    opacity: 0.06;
+}
+body[data-theme="dark"] .messages-container,
+body[data-theme="dark"] #panel-messages-container {
+    background-color: #0b141a;
+}
+
+/* ── Main header ── */
+body[data-theme="dark"] ._3AwwN {
+    background-color: #202c33;
+}
+body[data-theme="dark"] ._3AwwN svg path[fill="#263238"],
+body[data-theme="dark"] ._3AwwN svg path[fill-opacity=".5"],
+body[data-theme="dark"] ._3AwwN svg path[fill-opacity=".6"] {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+body[data-theme="dark"] #active-name { color: #e9edef; }
+body[data-theme="dark"] #active-status { color: #8696a0; }
+
+/* ============================================================
+   FOOTER & INPUT — sem borda branca
+   ============================================================ */
+body[data-theme="dark"] ._2jVLL,
+body[data-theme="dark"] .footer-content,
+body[data-theme="dark"] ._3oju3 {
+    background-color: #202c33;
+}
+
+/*
+   ._2bXVy é o wrapper do input de texto.
+   No style.css ele tem background:#fff, border-color:#fff, border-width:1px.
+   Precisamos sobrescrever tudo para eliminar a borda branca.
+*/
+body[data-theme="dark"] ._2bXVy {
+    background-color: #2a3942 !important;
+    border-color: #2a3942 !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+}
+
+body[data-theme="dark"] ._3F6QL {
+    background-color: #2a3942;
+    border-radius: 8px;
+}
+body[data-theme="dark"] #input-placeholder,
+body[data-theme="dark"] ._39LWd {
+    color: #8696a0 !important;
+}
+body[data-theme="dark"] #input-text {
+    color: #e9edef;
+    caret-color: #00a884;
+}
+
+/*
+   Ícones do footer (emoji, mic, send):
+   Usamos seletores específicos pelo fill hardcoded nos SVGs do HTML,
+   em vez de "svg path" genérico (que mataria as imagens coloridas de anexo).
+*/
+body[data-theme="dark"] ._2uQuX svg path[fill="#263238"],
+body[data-theme="dark"] ._2uQuX svg path[fill-opacity=".45"],
+body[data-theme="dark"] #btn-send svg path[fill="#263238"],
+body[data-theme="dark"] #btn-send svg path[fill-opacity=".45"],
+body[data-theme="dark"] #btn-send-microphone svg path[fill="#263238"],
+body[data-theme="dark"] #btn-send-microphone svg path[fill-opacity=".45"] {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ── Separador esquerdo do footer (borda entre emoji e input) ── */
+body[data-theme="dark"] ._3oju3 {
+    border-left-color: #2a3942 !important;
+}
+
+/* ============================================================
+   MENU DE ANEXOS — preservar ícones coloridos
+   ============================================================ */
+/*
+   Os ícones coloridos do menu de anexos (imagem, câmera, documento, contato)
+   são SVGs com <clipPath> e paths coloridos hardcoded.
+   NUNCA devemos sobreescrever os fills desses SVGs.
+   Apenas estilizamos o container dropdown.
+*/
+body[data-theme="dark"] ._1txFK {
+    background-color: #233138;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+body[data-theme="dark"] ._10anr:hover {
+    background-color: #2a3942;
+}
+/* Garante que btn-attach não herde nenhuma cor de fill global */
+body[data-theme="dark"] .btn-attach svg path {
+    /* Sem override aqui — deixa os paths coloridos originais */
+}
+
+/* ============================================================
+   MENSAGENS
+   ============================================================ */
+
+/*
+   html[dir] .message-out { background-color: #dcf8c6 }
+   html[dir] .message-in  { background-color: #fff    }
+   → precisamos de html[dir] no seletor para ganhar na especificidade
+*/
+html[dir] body[data-theme="dark"] .message-out {
+    background-color: #005c4b !important;
+}
+html[dir] body[data-theme="dark"] .message-in {
+    background-color: #202c33 !important;
+}
+
+/* Bolhas de texto (font-style _3DFk6 e Tkt2p) */
+/* font-style { color: #262626 } e _3_7SH { color: #262626 } */
+body[data-theme="dark"] .message-out .font-style,
+body[data-theme="dark"] .message-out ._3_7SH,
+body[data-theme="dark"] .message-out .Tkt2p {
+    background-color: #005c4b !important;
+    color: #e9edef !important;
+}
+body[data-theme="dark"] .message-in .font-style,
+body[data-theme="dark"] .message-in ._3_7SH,
+body[data-theme="dark"] .message-in .Tkt2p {
+    background-color: #202c33 !important;
+    color: #e9edef !important;
+}
+
+/* Texto e horário */
+body[data-theme="dark"] .message-out .message-text,
+body[data-theme="dark"] .message-out ._1wjpf,
+body[data-theme="dark"] .message-out .message-text span { color: #e9edef !important; }
+body[data-theme="dark"] .message-in .message-text,
+body[data-theme="dark"] .message-in ._1wjpf,
+body[data-theme="dark"] .message-in .message-text span  { color: #e9edef !important; }
+body[data-theme="dark"] .message-out .message-time,
+body[data-theme="dark"] .message-in  .message-time      { color: #8696a0 !important; }
+
+/* ── Mensagem de contato (._3_7SH.kNKwo) ── */
+body[data-theme="dark"] .message-out ._3_7SH.kNKwo,
+body[data-theme="dark"] .message-out .kNKwo ._1YNgi {
+    background-color: #005c4b !important;
+}
+body[data-theme="dark"] .message-in ._3_7SH.kNKwo,
+body[data-theme="dark"] .message-in .kNKwo ._1YNgi {
+    background-color: #202c33 !important;
+}
+/* Nome do contato no card */
+body[data-theme="dark"] .message-out ._3gkvk,
+body[data-theme="dark"] .message-in  ._3gkvk { color: #e9edef !important; }
+/* Botão "Enviar mensagem" */
+body[data-theme="dark"] .btn-message-send { color: #00a884 !important; }
+/* Separador entre info e botão */
+body[data-theme="dark"] ._6qEXM {
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ── Mensagem de imagem (._3_7SH._3qMSo) ── */
+body[data-theme="dark"] .message-out ._3_7SH._3qMSo,
+body[data-theme="dark"] .message-in  ._3_7SH._3qMSo {
+    background-color: transparent !important;
+}
+
+/* ── Mensagem de documento (._3_7SH._1ZPgd) ── */
+body[data-theme="dark"] .message-out ._3_7SH._1ZPgd,
+body[data-theme="dark"] .message-out ._1fnMt { background-color: #005c4b !important; }
+body[data-theme="dark"] .message-in  ._3_7SH._1ZPgd,
+body[data-theme="dark"] .message-in  ._1fnMt { background-color: #202c33 !important; }
+/* Área de preview do documento */
+html[dir] body[data-theme="dark"] .message-out ._2CORf ._12xX7 {
+    background-color: #056752 !important;
+}
+html[dir] body[data-theme="dark"] .message-in ._2CORf ._12xX7 {
+    background-color: #182229 !important;
+}
+/* Nome do arquivo e metadados */
+body[data-theme="dark"] .message-filename { color: #e9edef !important; }
+body[data-theme="dark"] ._3cMIj          { color: #8696a0 !important; }
+
+/* ── Mensagem de áudio (._3_7SH._17oKL) ── */
+body[data-theme="dark"] .message-out ._3_7SH._17oKL,
+body[data-theme="dark"] .message-out ._2N_Df { background-color: #005c4b !important; }
+body[data-theme="dark"] .message-in  ._3_7SH._17oKL,
+body[data-theme="dark"] .message-in  ._2N_Df { background-color: #202c33 !important; }
+body[data-theme="dark"] .message-audio-duration { color: #8696a0 !important; }
+
+/* ============================================================
+   HOME SCREEN
+   ============================================================ */
+body[data-theme="dark"] #home,
+body[data-theme="dark"] ._3qlW9 { background-color: #222e35; }
+/* Painel principal (área de chat vazia) */
+body[data-theme="dark"] ._3q4NP._1Iexl { background-color: #222e35 !important; }
+body[data-theme="dark"] ._3BqNZ h1,
+body[data-theme="dark"] .iHhHL { color: #e9edef; }
+body[data-theme="dark"] ._1ClcF,
+body[data-theme="dark"] ._1ClcF a { color: #8696a0; }
+
+/* ============================================================
+   PAINEL ESQUERDO — editar perfil + adicionar contato
+   ============================================================ */
+body[data-theme="dark"] .panel-left,
+body[data-theme="dark"] .panel-left ._2fq0t,
+body[data-theme="dark"] .panel-left ._2sNbV,
+body[data-theme="dark"] .panel-left ._1CRb5,
+body[data-theme="dark"] .panel-left ._12fSF,
+body[data-theme="dark"] .panel-left ._1wCju,
+body[data-theme="dark"] .panel-left ._2UkYn,
+body[data-theme="dark"] .panel-left ._1WNtc,
+body[data-theme="dark"] .panel-left .IuYNx,
+body[data-theme="dark"] .panel-left ._1DTd4,
+body[data-theme="dark"] .panel-left .ogWqZ,
+body[data-theme="dark"] .panel-left ._2VQzd,
+body[data-theme="dark"] .panel-left ._31v_P {
+    background-color: #111b21;
+}
+body[data-theme="dark"] .panel-left ._1FroB,
+body[data-theme="dark"] .panel-left .wDFKR {
+    background-color: #202c33;
+}
+body[data-theme="dark"] .panel-left ._1sYdX,
+body[data-theme="dark"] .panel-left .Cpiae,
+body[data-theme="dark"] .panel-left ._idKB { color: #8696a0; }
+body[data-theme="dark"] #input-name-panel-edit-profile { color: #e9edef; }
+body[data-theme="dark"] .panel-left ._3F6QL { background-color: #2a3942; }
+body[data-theme="dark"] .panel-left svg path[fill="#263238"],
+body[data-theme="dark"] .panel-left svg path[fill-opacity=".45"] {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ── Formulário adicionar contato ── */
+body[data-theme="dark"] .form-add .field { border-bottom: 1px solid #2a3942; }
+body[data-theme="dark"] #panel-add-contact,
+body[data-theme="dark"] #panel-add-contact ._3rsak,
+body[data-theme="dark"] #panel-add-contact ._2fq0t,
+body[data-theme="dark"] #panel-add-contact > span > div {
+    background-color: #111b21 !important;
+}
+body[data-theme="dark"] #panel-add-contact ._1FroB,
+body[data-theme="dark"] #panel-add-contact header {
+    background-color: #202c33 !important;
+}
+body[data-theme="dark"] #panel-add-contact input[type="email"] {
+    background: #2a3942 !important;
+    color: #e9edef !important;
+    border: 1px solid #3b4a54;
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+body[data-theme="dark"] #panel-add-contact input[type="email"]::placeholder {
+    color: #8696a0;
+}
+
+/* ============================================================
+   MODAL — Enviar Contatos
+   ============================================================ */
+body[data-theme="dark"] #modal-contacts .copyable-area {
+    background: rgba(11, 20, 26, 0.85) !important;
+}
+body[data-theme="dark"] #modal-contacts ._3gUiM,
+body[data-theme="dark"] #modal-contacts ._2dA13,
+body[data-theme="dark"] #modal-contacts ._1CnF3,
+body[data-theme="dark"] #modal-contacts ._15JHr,
+body[data-theme="dark"] #modal-contacts ._3lLzD,
+body[data-theme="dark"] #modal-contacts ._2fq0t,
+body[data-theme="dark"] #modal-contacts ._2sNbV,
+body[data-theme="dark"] #modal-contacts ._1woNK,
+body[data-theme="dark"] #modal-contacts .contact-list-item {
+    background-color: #111b21 !important;
+}
+body[data-theme="dark"] #modal-contacts header,
+body[data-theme="dark"] #modal-contacts .wDFKR {
+    background-color: #202c33 !important;
+}
+body[data-theme="dark"] #modal-contacts .gQzdc {
+    background-color: #2a3942 !important;
+}
+body[data-theme="dark"] #modal-contacts input[type="text"] {
+    background: transparent !important;
+    color: #e9edef !important;
+}
+body[data-theme="dark"] #modal-contacts input::placeholder { color: #8696a0; }
+body[data-theme="dark"] #modal-contacts ._1AKfk { color: #00a884; }
+body[data-theme="dark"] #modal-contacts .contact-name,
+body[data-theme="dark"] #modal-contacts ._1wjpf { color: #e9edef !important; }
+/* Ícones de fechar/voltar no modal (fill branco nos headers teal) — manter brancos */
+body[data-theme="dark"] #modal-contacts .wDFKR svg path[fill="#FFF"],
+body[data-theme="dark"] #modal-contacts header svg path[fill="#FFF"] {
+    fill: #ffffff !important;
+}
+/* Ícone de busca no modal */
+body[data-theme="dark"] #modal-contacts .gQzdc svg path[fill="#263238"] {
+    fill: #8696a0 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ============================================================
+   PAINÉIS DIREITOS — câmera e pré-visualização
+   ============================================================ */
+body[data-theme="dark"] .panel-main,
+body[data-theme="dark"] #panel-camera,
+body[data-theme="dark"] #panel-document-preview,
+body[data-theme="dark"] #panel-camera ._2fq0t,
+body[data-theme="dark"] #panel-document-preview ._2fq0t,
+body[data-theme="dark"] #panel-camera ._2sNbV,
+body[data-theme="dark"] #panel-document-preview ._2sNbV,
+body[data-theme="dark"] #panel-camera ._3fJXs,
+body[data-theme="dark"] #panel-camera ._1tfR8,
+body[data-theme="dark"] #panel-camera ._2pEAB,
+body[data-theme="dark"] #panel-camera .IuYNx,
+body[data-theme="dark"] #panel-camera .video-container,
+body[data-theme="dark"] #panel-document-preview ._3Mxes,
+body[data-theme="dark"] #panel-document-preview .NuJ4j,
+body[data-theme="dark"] #panel-document-preview ._3y0EN,
+body[data-theme="dark"] #panel-document-preview ._2-_Pl,
+body[data-theme="dark"] #panel-camera ._3UUn3,
+body[data-theme="dark"] #panel-document-preview ._3UUn3,
+body[data-theme="dark"] #panel-camera .r3Nu1,
+body[data-theme="dark"] .copyable-area._1drQ- {
+    background-color: #182229 !important;
+}
+body[data-theme="dark"] #panel-camera ._3ySAH,
+body[data-theme="dark"] #panel-document-preview ._3ySAH {
+    background-color: #0d1f29 !important;
+}
+body[data-theme="dark"] #filename-panel-document-preview { color: #e9edef; }
+
+/* ============================================================
+   ALERTA
+   ============================================================ */
+body[data-theme="dark"] ._3YewW {
+    background-color: #182229 !important;
+}
+body[data-theme="dark"] .alert-title { color: #e9edef; }
+body[data-theme="dark"] .alert-message { color: #8696a0; }
+
+/* ============================================================
+   PAINEL DE EMOJIS
+   ============================================================ */
+body[data-theme="dark"] ._1fkhx,
+body[data-theme="dark"] ._3ZkhL,
+body[data-theme="dark"] .Sbkt2,
+body[data-theme="dark"] ._2VzPl,
+body[data-theme="dark"] ._1qUCC,
+body[data-theme="dark"] .panel-emojis-container {
+    background-color: #202c33;
+}
+body[data-theme="dark"] ._1fkhx { border-top: 1px solid #2a3942; }
+body[data-theme="dark"] ._1-N6t { color: #8696a0; }
+
+/* ============================================================
+   MISC
+   ============================================================ */
+body[data-theme="dark"] .OUeyt.messages-count-new {
+    background-color: #00a884;
+    color: #ffffff;
+}
+body[data-theme="dark"] .typing { color: #00a884 !important; }
+
+/* ── Scrollbar ── */
+body[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+body[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================================
+   CORREÇÕES DARK MODE — PAINEL ESQUERDO E FOOTER
+   ============================================================ */
+
+/* ── Painel esquerdo: header com especificidade html[dir] ── */
+html[dir] body[data-theme="dark"] ._3auIg {
+    background-color: #202c33 !important;
+}
+
+/* ── Painel esquerdo: barra de pesquisa ── */
+html[dir] body[data-theme="dark"] ._3CPl4 {
+    background-color: #111b21 !important;
+}
+
+/* ── Painel esquerdo: lista de contatos ── */
+html[dir] body[data-theme="dark"] ._1NrpZ {
+    background-color: #111b21 !important;
+}
+
+/* ── _1CRb5 (alerta/banner no topo da sidebar) ── */
+html[dir] body[data-theme="dark"] ._1CRb5 {
+    background-color: #182229 !important;
+    box-shadow: none !important;
+}
+
+/* ── _2fq0t (painel-left interior) com especificidade html[dir] ── */
+html[dir] body[data-theme="dark"] ._2fq0t {
+    background-color: #111b21 !important;
+}
+
+/* ── Footer (_2jVLL): precisa de html[dir] para ganhar na especificidade ──
+   style.css: html[dir] ._2jVLL { background-color:rgba(255,255,255,.6) }
+   Sem html[dir] aqui, o branco semi-transparente fica sobreposto. ── */
+html[dir] body[data-theme="dark"] ._2jVLL {
+    background-color: #202c33 !important;
+}
+
+/* ── Input de mensagem (_3oju3 e _28ZV1): mesmo problema de html[dir] ──
+   style.css: html[dir] ._28ZV1, html[dir] ._3oju3 { background-color:#f5f1ee } ── */
+html[dir] body[data-theme="dark"] ._3oju3,
+html[dir] body[data-theme="dark"] ._28ZV1 {
+    background-color: #202c33 !important;
+    border-left-color: #2a3942 !important;
+    border-right-color: #2a3942 !important;
+}
+
+/* ── footer-content wrapper ── */
+html[dir] body[data-theme="dark"] .footer-content {
+    background-color: #202c33 !important;
+}
+
+/* ── _3F6QL (input box wrapper dentro do footer) ── */
+html[dir] body[data-theme="dark"] ._3F6QL {
+    background-color: #2a3942 !important;
+}
+
+/* ── _2bXVy (input text wrapper) ── */
+html[dir] body[data-theme="dark"] ._2bXVy {
+    background-color: #2a3942 !important;
+    border-color: #2a3942 !important;
+}
+
+/* ── _3dqpi background (gap entre colunas) com maior especificidade ── */
+html[dir] body[data-theme="dark"] ._3dqpi,
+html[dir] body[data-theme="dark"] .app._3dqpi {
+    background-color: #111b21 !important;
+}
+
+/* ── swl8g (#side wrapper): garante que o container pai seja escuro ── */
+html[dir] body[data-theme="dark"] .swl8g {
+    background-color: #111b21 !important;
+}
+
+/* ── Cor do texto padrao no painel esquerdo ── */
+body[data-theme="dark"] #side,
+body[data-theme="dark"] .swl8g {
+    color: #e9edef;
+}
+
+/* ── Icones da sidebar (_3Kxus) ── */
+body[data-theme="dark"] ._3Kxus svg path[fill="#263238"],
+body[data-theme="dark"] ._3Kxus svg path[fill-opacity=".55"],
+body[data-theme="dark"] ._3Kxus svg path[fill-opacity=".6"],
+body[data-theme="dark"] ._3Kxus svg path[fill-opacity=".45"] {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ── _20NlL (area dos botoes do header) ── */
+body[data-theme="dark"] ._20NlL svg path[fill="#263238"],
+body[data-theme="dark"] ._20NlL svg path[fill-opacity=".55"] {
+    fill: #aebac1 !important;
+    fill-opacity: 1 !important;
+}
+
+/* ── m6ZEb (wrapper da search bar) com html[dir] ── */
+html[dir] body[data-theme="dark"] .m6ZEb {
+    background-color: #111b21 !important;
+}
+
+/* ── _2cLHw (search input placeholder) ── */
+html[dir] body[data-theme="dark"] ._2cLHw {
+    background-color: transparent !important;
+    color: #8696a0 !important;
+}
+
+/* ── gQzdc (search bar inner container) com html[dir] ── */
+html[dir] body[data-theme="dark"] .gQzdc {
+    background-color: #2a3942 !important;
+    border-radius: 8px;
+}
+
+/* ── _2uQuX (botoes de emoji/mic) na footer ── */
+body[data-theme="dark"] ._2uQuX {
+    background-color: transparent !important;
+}
+
+/* ── Garante que #main nao vaze branco ── */
+html[dir] body[data-theme="dark"] ._1GX8_ {
+    background-color: #0b141a !important;
+}
+
+/* ── Chat background watermark ── */
+body[data-theme="dark"] .YUoyu {
+    opacity: 0.04 !important;
+}
+
+/* 1. Tail da mensagem ENVIADA (direita) - Cor #005c4b */
+html[dir] body[data-theme="dark"] .message-out .tail-container {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 13' width='8' height='13'%3E%3Cpath fill='%23005c4b' d='M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z'/%3E%3C/svg%3E") !important;
+}
+
+/* 2. Tail da mensagem RECEBIDA (esquerda) - Cor #202c33 */
+html[dir] body[data-theme="dark"] .message-in .tail-container {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 13' width='8' height='13'%3E%3Cpath fill='%23202c33' d='M1.533 3.568L8 12.193V1H2.812C1.042 1 .474 2.156 1.533 3.568z'/%3E%3C/svg%3E") !important;
+}
+
+/* 3. Oculta o reflexo/sombra extra da tail que pode bugar visualmente no fundo escuro */
+html[dir] body[data-theme="dark"] .tail-container.highlight {
+    background-image: none !important;
+}

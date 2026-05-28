@@ -22,6 +22,7 @@ export class WhatsAppController {
         this.elementsPrototype();
         this.loadElements();
         this.initEvents();
+        this.initTheme();
         this.checkNotifications();
     }
 
@@ -43,6 +44,14 @@ export class WhatsAppController {
             })
         }
     }
+
+    initTheme() {
+        if (!this.el.btnThemeToggle) return;
+        this.el.btnThemeToggle.on('click', () => {
+            window._theme.toggle();
+        });
+    }
+
 
     notification(data){
         if (Notification.permission === 'granted' && !this._active){

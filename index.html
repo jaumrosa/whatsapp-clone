@@ -7,6 +7,7 @@
     <title>WhatsApp Clone</title>
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600%7CRoboto:300,400,500" media="all">
 </head>
 
@@ -285,15 +286,35 @@
                                 <div class="_3Kxus">
                                     <span>
                                         <div class="rAUz7">
-                                            <div role="button" title="Status">
-                                                <span data-icon="status-v3-unread">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                                        <path fill="#727A7E" d="M12.072 1.761a10.05 10.05 0 0 0-9.303 5.65.977.977 0 0 0 1.756.855 8.098 8.098 0 0 1 7.496-4.553.977.977 0 1 0 .051-1.952zM1.926 13.64a10.052 10.052 0 0 0 7.461 7.925.977.977 0 0 0 .471-1.895 8.097 8.097 0 0 1-6.012-6.386.977.977 0 0 0-1.92.356zm13.729 7.454a10.053 10.053 0 0 0 6.201-8.946.976.976 0 1 0-1.951-.081v.014a8.097 8.097 0 0 1-4.997 7.209.977.977 0 0 0 .727 1.813l.02-.009z"></path>
-                                                        <path fill="#009588" d="M19 1.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"></path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-    
+                                            <button id="btn-theme-toggle" title="Alternar tema claro/escuro">
+                                                <svg class="icon-sun"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" width="24" height="24">
+                                                    <path fill="#4B4B4B"
+                                                        d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5
+                                                            5-2.24 5-5-2.24-5-5-5zm0-5a1 1 0 0 1 1 1v2a1 1
+                                                            0 0 1-2 0V3a1 1 0 0 1 1-1zm0 18a1 1 0 0 1 1 1v-2a1
+                                                            1 0 0 1-2 0v2a1 1 0 0 1 1-1zM3 13H1a1 1 0 0 1
+                                                            0-2h2a1 1 0 0 1 0 2zm20 0h-2a1 1 0 0 1 0-2h2a1
+                                                            1 0 0 1 0 2zM5.64 6.05 4.22 4.64a1 1 0 0
+                                                            1 1.41-1.41l1.41 1.41A1 1 0 0 1 5.64 6.05zm12.73
+                                                            12.73-1.41-1.41a1 1 0 0 1 1.41-1.41l1.41
+                                                            1.41a1 1 0 0 1-1.41 1.41zM4.22 19.78a1 1 0 0 1
+                                                            0-1.41l1.41-1.41a1 1 0 0 1 1.41 1.41l-1.41
+                                                            1.41a1 1 0 0 1-1.41 0zm13.15-13.15a1 1 0 0
+                                                            1 0-1.41l1.41-1.41a1 1 0 0 1 1.41 1.41l-1.41
+                                                            1.41a1 1 0 0 1-1.41 0z"/>
+                                                </svg>
+                                                <svg class="icon-moon"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" width="24" height="24">
+                                                    <path fill="#aebac1"
+                                                        d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36
+                                                            a5.389 5.389 0 0 1-4.4 2.26
+                                                            5.403 5.403 0 0 1-3.14-9.8
+                                                            c-.44-.06-.9-.1-1.36-.1z"/>
+                                                </svg>
+                                            </button>
                                         </div>
                                         <div class="rAUz7">
                                             <div role="button" title="Nova conversa" id="btn-new-contact">
@@ -303,7 +324,6 @@
                                                     </svg>
                                                 </span>
                                             </div>
-    
                                         </div>
                                         <div class="rAUz7">
                                             <div role="button" title="Menu">

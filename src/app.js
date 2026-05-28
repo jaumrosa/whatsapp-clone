@@ -1,2 +1,4 @@
 import {WhatsAppController} from './controller/WhatsappController.js';
-window.app = new WhatsAppController();
+import {ThemeController}    from './controller/ThemeController.js';
+window._theme = new ThemeController();
+window.app    = new WhatsAppController();
